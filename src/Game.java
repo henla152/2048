@@ -28,11 +28,13 @@ public class Game {
 //            block.print();
 //        }
     }
+
     public Game(Painter painter) {
         this.painter = painter;
         blockList = new ArrayList<>();
 
     }
+
     public void gameInit() {
         //slumpa 2 block som har värde antingen 2 eller 4
 
@@ -43,14 +45,38 @@ public class Game {
             tempY = random.nextInt(4);
         } while (position1.getX() == tempX && position1.getY() == tempY);
         Position position2 = new Position(tempX, tempY);
-
         blockList.add(new Block(position1));
         blockList.add(new Block(position2));
-        for (int i = 0; i < 100; i++) {
-            blockList.add(new Block(new Position(random.nextInt(4), random.nextInt(4))));
+
+
+        for (int i = 0; i < 14; i++) {
+            newBlock();
         }
 
+
+
+/*        for (int i = 0; i < 100; i++) {
+            blockList.add(new Block(new Position(random.nextInt(4), random.nextInt(4))));
+        }*/
     }
+
+    private void newBlock() {
+        int tempX, tempY;
+        do {
+            tempX = random.nextInt(BOARD_SIZE);
+            tempY = random.nextInt(BOARD_SIZE);
+        } while (!slotIsFree(new Position(tempX,tempY)));
+
+        blockList.add(new Block(new Position(tempX, tempY)));
+    }
+
+    private boolean slotIsFree(Position position) {
+        for (Block block : blockList)
+            if (block.getPosition().getX() == position.getX() && block.getPosition().getY() == position.getY())
+                return false;
+        return true;
+    }
+
 
     private void waitForKeyInput(Terminal terminal) {
         Key key;
@@ -65,7 +91,7 @@ public class Game {
                 key = terminal.readInput();
             }
 
-            while (key ==null);
+            while (key == null);
 
             switch (key.getKind()) {
                 case ArrowDown:

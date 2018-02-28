@@ -9,7 +9,7 @@ import static com.googlecode.lanterna.input.Key.Kind.*;
 
 public class Game {
 
-    private final int BOARD_SIZE = 4;
+    public static final int BOARD_SIZE = 4;
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;

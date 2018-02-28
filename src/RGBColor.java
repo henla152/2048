@@ -1,36 +1,36 @@
 public class RGBColor {
 
-    private int r;
-    private int g;
-    private int b;
+    private int red;
+    private int green;
+    private int blue;
 
-    public RGBColor(int r, int g, int b) {
-        this.setR(r);
-        this.setG(g);
-        this.setB(b);
+    public RGBColor(int red, int green, int blue) {
+        this.setRed(red);
+        this.setGreen(green);
+        this.setBlue(blue);
     }
 
-    private void setR(int r) {
-        this.r = r;
+    private void setRed(int red) {
+        this.red = red;
     }
 
-    private void setG(int g) {
-        this.g = g;
+    private void setGreen(int green) {
+        this.green = green;
     }
 
-    private void setB(int b) {
-        this.b = b;
+    private void setBlue(int blue) {
+        this.blue = blue;
     }
 
-    public int getR() {
-        return r;
+    public int getRed() {
+        return red;
     }
 
-    public int getG() {
-        return g;
+    public int getGreen() {
+        return green;
     }
 
-    public int getB() {
-        return b;
+    public int getBlue() {
+        return blue;
     }
 }

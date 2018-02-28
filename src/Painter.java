@@ -2,6 +2,7 @@ import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 public class Painter {
 
@@ -14,5 +15,11 @@ public class Painter {
         terminal.setCursorVisible(false);
     }
 
+    public Terminal getTerminal() {
+        return terminal;
+    }
 
+    public void paint(List<Block> blockList) {
+
+    }
 }

@@ -5,31 +5,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.googlecode.lanterna.input.Key.Kind.*;
+
 public class Game {
 
     private final int BOARD_SIZE = 4;
     private Painter painter;
     private List<Block> blockList;
+    private boolean gameOver = false;
     Random random = new Random();
 
     public void gameLoop() {
-//        handleInput();
-        painter.paint(blockList);
 
-        System.out.println(blockList.size());
-        for (Block block : blockList) {
-            block.print();
+        while (!gameOver) {
+
+            painter.paint(blockList);
+            waitForKeyInput(painter.getTerminal());
+
         }
+//        System.out.println(blockList.size());
+//        for (Block block : blockList) {
+//            block.print();
+//        }
     }
-
-
     public Game(Painter painter) {
         this.painter = painter;
         blockList = new ArrayList<>();
 
     }
-
-
     public void gameInit() {
         //slumpa 2 block som har värde antingen 2 eller 4
 
@@ -47,53 +50,44 @@ public class Game {
             blockList.add(new Block(new Position(random.nextInt(4), random.nextInt(4))));
         }
 
-
     }
 
-
-
-/*    private void handleInput() {
+    private void waitForKeyInput(Terminal terminal) {
         Key key;
-        boolean badInput = true;
-        while (badInput) {
+
+        while (true) {
             do {
                 try {
                     Thread.sleep(5);
-                } catch (InterruptedException ex) {
+                } catch (InterruptedException e) {
 
                 }
                 key = terminal.readInput();
             }
-            while (key == null);
+
+            while (key ==null);
 
             switch (key.getKind()) {
                 case ArrowDown:
-                    badInput = false;
-                    player.moveDown(objects);
+
                     break;
                 case ArrowUp:
-                    badInput = false;
-                    player.moveUp(objects);
+
                     break;
                 case ArrowLeft:
 
-                    badInput = false;
-                    player.moveLeft(objects);
                     break;
                 case ArrowRight:
-                    badInput = false;
-                    player.moveRight(objects);
                     break;
-                case q:
+
+                case Escape:
                     terminal.exitPrivateMode();
-
+                    System.exit(0);
+                    break;
             }
-
             while (key != null) {
                 key = terminal.readInput();
             }
         }
     }
-    */
-
 }

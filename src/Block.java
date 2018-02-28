@@ -16,7 +16,9 @@ public class Block {
     }
 
     public Block(Position position, int currentValue) {
-
+        this.currentValue = currentValue;
+        this.position = position;
+        this.color = ColorMap.getColor(currentValue);
     }
 
     //Debug

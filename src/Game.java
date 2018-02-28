@@ -14,6 +14,7 @@ public class Game {
 
     public void gameLoop() {
 //        handleInput();
+        painter.paint(blockList);
 
         System.out.println(blockList.size());
         for (Block block : blockList) {
@@ -22,9 +23,8 @@ public class Game {
     }
 
 
-    public Game() {
-
-        painter = new Painter();
+    public Game(Painter painter) {
+        this.painter = painter;
         blockList = new ArrayList<>();
 
     }
@@ -32,21 +32,20 @@ public class Game {
 
     public void gameInit() {
         //slumpa 2 block som har värde antingen 2 eller 4
-//        blockList.add(new Block());
 
         int tempX, tempY;
-        Position position1 = new Position(random.nextInt(4),random.nextInt(4));
+        Position position1 = new Position(random.nextInt(4), random.nextInt(4));
         do {
             tempX = random.nextInt(4);
             tempY = random.nextInt(4);
         } while (position1.getX() == tempX && position1.getY() == tempY);
-        Position position2 = new Position(random.nextInt(4),random.nextInt(4));
+        Position position2 = new Position(tempX, tempY);
 
         blockList.add(new Block(position1));
         blockList.add(new Block(position2));
-
-
-
+        for (int i = 0; i < 100; i++) {
+            blockList.add(new Block(new Position(random.nextInt(4), random.nextInt(4))));
+        }
 
 
     }

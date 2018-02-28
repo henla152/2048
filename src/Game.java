@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Game {
 
-    private final int BOARD_SIZE = 4;
+    public static final int BOARD_SIZE = 4;
     private Painter painter;
     private List<Block> blockList;
     Random random = new Random();

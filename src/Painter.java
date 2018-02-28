@@ -23,15 +23,16 @@ public class Painter {
         return terminal;
     }
 
+    int counter = 0;
     public void paint(List<Block> blockList) {
         for (Block block : blockList) {
-            terminal.applyForegroundColor(block.getColor().getR(), block.getColor().getG(), block.getColor().getB());
-            int tempX = block.getPosition().getX() * xScale + xOffset;
-            int tempY = block.getPosition().getY() * yScale + yOffset;
+            terminal.applyBackgroundColor(block.getColor().getR(), block.getColor().getG(), block.getColor().getB());
+            int tempX = (block.getPosition().getX() * xScale) + xOffset;
+            int tempY = (block.getPosition().getY() * yScale) + yOffset;
             for (int x = tempX; x < tempX + xScale - 1; x++) {
                 for (int y = tempY; y < tempY + yScale - 1; y++) {
                     terminal.moveCursor(x, y);
-                    terminal.putCharacter('\u2588');
+                    terminal.putCharacter(' ');
                 }
             }
 

@@ -17,7 +17,7 @@ public class Game {
 
         System.out.println(blockList.size());
         for (Block block : blockList) {
-            System.out.println(block.currentValue + " " + block.getPosition());
+            block.print();
         }
     }
 

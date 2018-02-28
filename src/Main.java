@@ -10,9 +10,5 @@ public class Main {
             game.gameLoop();
             bool = false;
         }
-
-
     }
-
-
 }

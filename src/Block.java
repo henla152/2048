@@ -15,6 +15,11 @@ public class Block {
 
     }
 
+    //Debug
+    public void print(){
+        System.out.println("Block\t" + "Position " + position.getX() + ", " + position.getY() + "\tcurrentValue " + currentValue);
+    }
+
     public Position getPosition() {
         return position;
     }

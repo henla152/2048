@@ -20,24 +20,26 @@ public class Game {
             //logik
             //kontrollera gameOVer
 
-            System.out.println("runda");
             painter.paint(blockList);
+
+            //DEBUG
+            for (Block block : blockList) {
+                System.out.print(block.getCurrentMagnitude());
+                System.out.printf(": X: %d, Y: %d%n", block.getPosition().getX(), block.getPosition().getY());
+            }
+
             Direction direction = waitForKeyInput(painter.getTerminal());
-            if (tryMoveBlocks(direction) || checkForCollisions(direction)) { //Fixade problemet?
+            if (tryMoveBlocks(direction) | checkForCollisions(direction)) { //Fixade problemet?
                 //checkForCollisions(direction);
                 tryMoveBlocks(direction);
                 addBlock();
 
             }
-            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
-                    gameOver = true;
-            }
-
+//            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
+//                    gameOver = true;
+//            }
         }
     }
-
-
-
 
 //        System.out.println(blockList.size());
 //        for (Block block : blockList) {
@@ -52,6 +54,7 @@ public class Game {
             board[block.getPosition().getX()][block.getPosition().getY()] = block;
         }
 
+        boolean hasCombined = false;
         int xSign = -1;
         int xDir = 0;
         int xStart = 0;
@@ -91,30 +94,29 @@ public class Game {
                 yDir = 1;
                 break;
         }
-
         for (int x = xStart; x != xEnd; x = x - xSign) {
             for (int y = yStart; y != yEnd; y = y - ySign) {
                 System.out.printf("x: %d, y: %d%n", x, y);
                 Block tempBlock = board[x + xDir][y + yDir];
                 if (tempBlock != null && board[x][y] != null) {
                     if (board[x][y].getCurrentMagnitude() == tempBlock.getCurrentMagnitude()) {
-                        board[x + xDir][y + yDir] = new Block(new Position(x + xDir, y + yDir), tempBlock.getCurrentMagnitude().next());
+//                        board[x + xDir][y + yDir] = new Block(new Position(x + xDir, y + yDir), tempBlock.getCurrentMagnitude().next());
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
-                        return true;
+                        hasCombined = true;
                     }
                 }
             }
         }
-        return false;
+        return hasCombined;
     }
 
     private Block combineBlocks(Block a, Block b) {
-        Block res = new Block(new Position(a.getPosition().getX(), a.getPosition().getY()), a.getCurrentMagnitude().next());
+        Block newBlock = new Block(new Position(a.getPosition().getX(), a.getPosition().getY()), a.getCurrentMagnitude().next());
         blockList.remove(a);
         blockList.remove(b);
-        blockList.add(res);
-        return res;
+        blockList.add(newBlock);
+        return newBlock;
     }
 
     public Game(Painter painter) {
@@ -127,13 +129,16 @@ public class Game {
         addBlock();
         addBlock();
 
+        //DEBUG
+//        for (int x = 1; x < 4; x++) {
+//            for (int y = 0; y < 4; y++) {
+//                blockList.add(new Block(new Position(x,y), Block.Magnitude.M2));
+//            }
+//        }
+
 
         /*for (int i = 0; i < 14; i++) {
             addBlock();
-        }*/
-
-        /* for (int i = 0; i < 100; i++) {
-            blockList.add(new Block(new Position(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE))));
         }*/
     }
 

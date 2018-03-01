@@ -39,4 +39,8 @@ public class Block {
     public RGBColor getColor() {
         return color;
     }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 }

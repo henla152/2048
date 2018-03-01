@@ -2,10 +2,9 @@ import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import static com.googlecode.lanterna.input.Key.Kind.*;
 
 public class Game {
 
@@ -18,7 +17,9 @@ public class Game {
     public void gameLoop() {
 
         while (!gameOver) {
-
+            //logik
+            //kontrollera gameOVer
+            //addBlock
             painter.paint(blockList);
             waitForKeyInput(painter.getTerminal());
 
@@ -32,51 +33,78 @@ public class Game {
     public Game(Painter painter) {
         this.painter = painter;
         blockList = new ArrayList<>();
-
     }
 
     public void gameInit() {
+
+
+        Block blockTest = new Block(new Position(3, 0), Block.Magnitude.M4);
+        blockList.add(blockTest);
+        Block blockTest2 = new Block(new Position(1, 0),Block.Magnitude.M2);
+        blockList.add(blockTest2);
+
+//        moveBlocksLeft();
+
+/*        Block blockTest1 = new Block(new Position(2, 0));
+        blockList.add(blockTest1);*/
+
+
         //slumpa 2 block som har värde antingen 2 eller 4
-
-        int tempX, tempY;
-        Position position1 = new Position(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE));
-        do {
-            tempX = random.nextInt(BOARD_SIZE);
-            tempY = random.nextInt(BOARD_SIZE);
-        } while (position1.getX() == tempX && position1.getY() == tempY);
-        Position position2 = new Position(tempX, tempY);
-        blockList.add(new Block(position1));
-        blockList.add(new Block(position2));
-
-
-        for (int i = 0; i < 14; i++) {
-            newBlock();
-        }
+/*        addBlock();
+        addBlock();*/
 
 
 
-/*        for (int i = 0; i < 100; i++) {
+/*        for (int i = 0; i < 14; i++) {
+            addBlock();
+        }*/
+
+        /* for (int i = 0; i < 100; i++) {
             blockList.add(new Block(new Position(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE))));
         }*/
     }
 
-    private void newBlock() {
-        int tempX, tempY;
-        do {
-            tempX = random.nextInt(BOARD_SIZE);
-            tempY = random.nextInt(BOARD_SIZE);
-        } while (!slotIsFree(new Position(tempX,tempY)));
-
-        blockList.add(new Block(new Position(tempX, tempY)));
+    private void addBlock() {
+        List<Position> tempList = listOfFreePositions();
+        Collections.shuffle(tempList);
+        blockList.add(new Block(tempList.get(0)));
     }
 
-    private boolean slotIsFree(Position position) {
+    private List<Position> listOfFreePositions() {
+        List<Position> result = new ArrayList<>();
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                if (positionIsFree(new Position(x, y))) {
+                    result.add(new Position(x, y));
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean positionIsFree(Position position) {
         for (Block block : blockList)
             if (block.getPosition().getX() == position.getX() && block.getPosition().getY() == position.getY())
                 return false;
         return true;
     }
 
+
+    private void moveBlocksLeft() {
+        for (int x = 1; x < BOARD_SIZE; x++) {      //navigera
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                for (Block block : blockList) {
+                    if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
+                        int tempX = x;
+                        while (tempX >= 1 && positionIsFree(new Position(tempX - 1, y))) {
+                            tempX--;
+                        }
+                        block.setPosition(new Position(tempX, y));
+                    }
+                }
+            }
+        }
+    }
 
     private void waitForKeyInput(Terminal terminal) {
         Key key;
@@ -101,7 +129,8 @@ public class Game {
 
                     break;
                 case ArrowLeft:
-
+                    moveBlocksLeft();
+                    System.out.println("Vänster");
                     break;
                 case ArrowRight:
                     break;

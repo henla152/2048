@@ -39,10 +39,10 @@ public class Game {
         //slumpa 2 block som har värde antingen 2 eller 4
 
         int tempX, tempY;
-        Position position1 = new Position(random.nextInt(4), random.nextInt(4));
+        Position position1 = new Position(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE));
         do {
-            tempX = random.nextInt(4);
-            tempY = random.nextInt(4);
+            tempX = random.nextInt(BOARD_SIZE);
+            tempY = random.nextInt(BOARD_SIZE);
         } while (position1.getX() == tempX && position1.getY() == tempY);
         Position position2 = new Position(tempX, tempY);
         blockList.add(new Block(position1));
@@ -56,7 +56,7 @@ public class Game {
 
 
 /*        for (int i = 0; i < 100; i++) {
-            blockList.add(new Block(new Position(random.nextInt(4), random.nextInt(4))));
+            blockList.add(new Block(new Position(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE))));
         }*/
     }
 

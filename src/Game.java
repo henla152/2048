@@ -38,12 +38,12 @@ public class Game {
     public void gameInit() {
 
 
-        Block blockTest = new Block(new Position(3, 0), Block.Magnitude.M4);
+        Block blockTest = new Block(new Position(1, 1), Block.Magnitude.M4);
         blockList.add(blockTest);
-        Block blockTest2 = new Block(new Position(1, 0),Block.Magnitude.M2);
-        blockList.add(blockTest2);
+       // Block blockTest2 = new Block(new Position(1, 0),Block.Magnitude.M2);
+        //blockList.add(blockTest2);
 
-//        moveBlocksLeft();
+        moveBlocksDown();
 
 /*        Block blockTest1 = new Block(new Position(2, 0));
         blockList.add(blockTest1);*/
@@ -89,7 +89,6 @@ public class Game {
         return true;
     }
 
-
     private void moveBlocksLeft() {
         for (int x = 1; x < BOARD_SIZE; x++) {      //navigera
             for (int y = 0; y < BOARD_SIZE; y++) {
@@ -104,6 +103,55 @@ public class Game {
                 }
             }
         }
+    }
+    private void moveBlocksRight(){
+        for (int x = 0; x < BOARD_SIZE-1; x++) {      //navigera
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                for (Block block : blockList) {
+                    if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
+                        int tempX = x;
+                        while (tempX < BOARD_SIZE-1 && positionIsFree(new Position(tempX +1, y))) {
+                            tempX++;
+                        }
+                        block.setPosition(new Position(tempX, y));
+                    }
+                }
+            }
+        }
+    }
+
+    private void moveBlocksUp(){
+        for (int x = 0; x < BOARD_SIZE; x++) {      //navigera
+            for (int y = 1; y < BOARD_SIZE; y++) {
+                for (Block block : blockList) {
+                    if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
+                        int tempY = y;
+                        while (tempY >= 1 && positionIsFree(new Position(x, tempY-1))) {
+                            tempY--;
+                        }
+                        block.setPosition(new Position(x, tempY));
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void moveBlocksDown(){
+        for (int x = 0; x < BOARD_SIZE; x++) {      //navigera
+            for (int y = 0; y < BOARD_SIZE-1; y++) {
+                for (Block block : blockList) {
+                    if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
+                        int tempY = y;
+                        while (tempY < BOARD_SIZE-1 && positionIsFree(new Position(x, tempY+1))) {
+                            tempY++;
+                        }
+                        block.setPosition(new Position(x, tempY));
+                    }
+                }
+            }
+        }
+
     }
 
     private void waitForKeyInput(Terminal terminal) {
@@ -123,16 +171,17 @@ public class Game {
 
             switch (key.getKind()) {
                 case ArrowDown:
-
+                    moveBlocksDown();
                     break;
                 case ArrowUp:
-
+                    moveBlocksUp();
                     break;
                 case ArrowLeft:
                     moveBlocksLeft();
                     System.out.println("Vänster");
                     break;
                 case ArrowRight:
+                    moveBlocksRight();
                     break;
 
                 case Escape:

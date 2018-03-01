@@ -19,15 +19,21 @@ public class Game {
         while (!gameOver) {
             //logik
             //kontrollera gameOVer
-            //addBlock
+
+            System.out.println("runda");
             painter.paint(blockList);
             waitForKeyInput(painter.getTerminal());
-
+            checkForCollisions();
+            addBlock();
         }
 //        System.out.println(blockList.size());
 //        for (Block block : blockList) {
 //            block.print();
 //        }
+    }
+
+    private void checkForCollisions() {
+        
     }
 
     public Game(Painter painter) {
@@ -36,26 +42,12 @@ public class Game {
     }
 
     public void gameInit() {
-
-
-        Block blockTest = new Block(new Position(3, 0), Block.Magnitude.M4);
-        blockList.add(blockTest);
-        Block blockTest2 = new Block(new Position(1, 0),Block.Magnitude.M2);
-        blockList.add(blockTest2);
-
-//        moveBlocksLeft();
-
-/*        Block blockTest1 = new Block(new Position(2, 0));
-        blockList.add(blockTest1);*/
-
-
         //slumpa 2 block som har värde antingen 2 eller 4
-/*        addBlock();
-        addBlock();*/
+        addBlock();
+        addBlock();
 
 
-
-/*        for (int i = 0; i < 14; i++) {
+        /*for (int i = 0; i < 14; i++) {
             addBlock();
         }*/
 
@@ -109,7 +101,6 @@ public class Game {
     private void waitForKeyInput(Terminal terminal) {
         Key key;
 
-        while (true) {
             do {
                 try {
                     Thread.sleep(5);
@@ -130,7 +121,6 @@ public class Game {
                     break;
                 case ArrowLeft:
                     moveBlocksLeft();
-                    System.out.println("Vänster");
                     break;
                 case ArrowRight:
                     break;
@@ -144,5 +134,4 @@ public class Game {
                 key = terminal.readInput();
             }
         }
-    }
 }

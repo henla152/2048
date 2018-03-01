@@ -23,19 +23,29 @@ public class Game {
             System.out.println("runda");
             painter.paint(blockList);
             Direction direction = waitForKeyInput(painter.getTerminal());
-            if (tryMoveBlocks(direction)) {
-                checkForCollisions(direction);
+            if (tryMoveBlocks(direction) || checkForCollisions(direction)) { //Fixade problemet?
+                //checkForCollisions(direction);
                 tryMoveBlocks(direction);
                 addBlock();
+
             }
+            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
+                    gameOver = true;
+            }
+
         }
+    }
+
+
+
+
 //        System.out.println(blockList.size());
 //        for (Block block : blockList) {
 //            block.print();
 //        }
-    }
 
-    private void checkForCollisions(Direction direction) {
+
+    private boolean checkForCollisions(Direction direction) {
         Block[][] board = new Block[BOARD_SIZE][BOARD_SIZE];
 
         for (Block block : blockList) {
@@ -76,7 +86,7 @@ public class Game {
             case DOWN:
                 System.out.println("DOWN");
                 ySign = 1;
-                yStart = BOARD_SIZE-2;
+                yStart = BOARD_SIZE - 2;
                 yEnd = -1;
                 yDir = 1;
                 break;
@@ -91,10 +101,12 @@ public class Game {
                         board[x + xDir][y + yDir] = new Block(new Position(x + xDir, y + yDir), tempBlock.getCurrentMagnitude().next());
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     private Block combineBlocks(Block a, Block b) {

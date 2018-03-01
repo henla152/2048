@@ -11,7 +11,7 @@ public class Block {
         }
     }
 
-    public Magnitude currentMagnitude;
+    private Magnitude currentMagnitude;
     private Position position;
     private RGBColor color;
     private boolean newlyCombined = false;
@@ -42,5 +42,9 @@ public class Block {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public Magnitude getCurrentMagnitude() {
+        return currentMagnitude;
     }
 }

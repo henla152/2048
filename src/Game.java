@@ -22,9 +22,12 @@ public class Game {
 
             System.out.println("runda");
             painter.paint(blockList);
-            waitForKeyInput(painter.getTerminal());
-            checkForCollisions();
-            addBlock();
+            Direction direction = waitForKeyInput(painter.getTerminal());
+            if (tryMoveBlocks(direction)) {
+                checkForCollisions(direction);
+                tryMoveBlocks(direction);
+                addBlock();
+            }
         }
 //        System.out.println(blockList.size());
 //        for (Block block : blockList) {
@@ -32,8 +35,74 @@ public class Game {
 //        }
     }
 
-    private void checkForCollisions() {
-        
+    private void checkForCollisions(Direction direction) {
+        Block[][] board = new Block[BOARD_SIZE][BOARD_SIZE];
+
+        for (Block block : blockList) {
+            board[block.getPosition().getX()][block.getPosition().getY()] = block;
+        }
+
+        int xSign = -1;
+        int xDir = 0;
+        int xStart = 0;
+        int xEnd = BOARD_SIZE;
+        int ySign = -1;
+        int yDir = 0;
+        int yStart = 0;
+        int yEnd = BOARD_SIZE;
+
+        switch (direction) {
+            case LEFT:
+                System.out.println("LEFT");
+                xSign = -1;
+                xStart = 1;
+                xEnd = BOARD_SIZE;
+                xDir = -1;
+                break;
+            case RIGHT:
+                System.out.println("RIGHT");
+                xSign = 1;
+                xStart = BOARD_SIZE - 2;
+                xEnd = -1;
+                xDir = 1;
+                break;
+            case UP:
+                System.out.println("UP");
+                ySign = -1;
+                yStart = 1;
+                yEnd = BOARD_SIZE;
+                yDir = -1;
+                break;
+            case DOWN:
+                System.out.println("DOWN");
+                ySign = 1;
+                yStart = BOARD_SIZE-2;
+                yEnd = -1;
+                yDir = 1;
+                break;
+        }
+
+        for (int x = xStart; x != xEnd; x = x - xSign) {
+            for (int y = yStart; y != yEnd; y = y - ySign) {
+                System.out.printf("x: %d, y: %d%n", x, y);
+                Block tempBlock = board[x + xDir][y + yDir];
+                if (tempBlock != null && board[x][y] != null) {
+                    if (board[x][y].getCurrentMagnitude() == tempBlock.getCurrentMagnitude()) {
+                        board[x + xDir][y + yDir] = new Block(new Position(x + xSign, y + xSign), tempBlock.getCurrentMagnitude().next());
+                        board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
+                        board[x][y] = null;
+                    }
+                }
+            }
+        }
+    }
+
+    private Block combineBlocks(Block a, Block b) {
+        Block res = new Block(new Position(a.getPosition().getX(), a.getPosition().getY()), a.getCurrentMagnitude().next());
+        blockList.remove(a);
+        blockList.remove(b);
+        blockList.add(res);
+        return res;
     }
 
     public Game(Painter painter) {
@@ -81,7 +150,28 @@ public class Game {
         return true;
     }
 
-    private void moveBlocksLeft() {
+    private boolean tryMoveBlocks(Direction direction) {
+
+        switch (direction) {
+            case DOWN:
+                return tryMoveBlocksDown();
+            case UP:
+                return tryMoveBlocksUp();
+            case LEFT:
+                return tryMoveBlocksLeft();
+            case RIGHT:
+                return tryMoveBlocksRight();
+
+//            case Escape:
+//                terminal.exitPrivateMode();
+//                System.exit(0);
+//                break;
+        }
+        return false;
+    }
+
+    private boolean tryMoveBlocksLeft() {
+        boolean hasMoved = false;
         for (int x = 1; x < BOARD_SIZE; x++) {      //navigera
             for (int y = 0; y < BOARD_SIZE; y++) {
                 for (Block block : blockList) {
@@ -89,66 +179,78 @@ public class Game {
                         int tempX = x;
                         while (tempX >= 1 && positionIsFree(new Position(tempX - 1, y))) {
                             tempX--;
+                            hasMoved = true;
                         }
                         block.setPosition(new Position(tempX, y));
                     }
                 }
             }
         }
+        return hasMoved;
     }
-    private void moveBlocksRight(){
-        for (int x = 0; x < BOARD_SIZE-1; x++) {      //navigera
+
+    private boolean tryMoveBlocksRight() {
+        boolean hasMoved = false;
+        for (int x = 0; x < BOARD_SIZE - 1; x++) {      //navigera
             for (int y = 0; y < BOARD_SIZE; y++) {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
                         int tempX = x;
-                        while (tempX < BOARD_SIZE-1 && positionIsFree(new Position(tempX +1, y))) {
+                        while (tempX < BOARD_SIZE - 1 && positionIsFree(new Position(tempX + 1, y))) {
                             tempX++;
+                            hasMoved = true;
                         }
                         block.setPosition(new Position(tempX, y));
                     }
                 }
             }
         }
+        return hasMoved;
     }
 
-    private void moveBlocksUp(){
+    private boolean tryMoveBlocksUp() {
+        boolean hasMoved = false;
         for (int x = 0; x < BOARD_SIZE; x++) {      //navigera
             for (int y = 1; y < BOARD_SIZE; y++) {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
                         int tempY = y;
-                        while (tempY >= 1 && positionIsFree(new Position(x, tempY-1))) {
+                        while (tempY >= 1 && positionIsFree(new Position(x, tempY - 1))) {
                             tempY--;
+                            hasMoved = true;
                         }
                         block.setPosition(new Position(x, tempY));
                     }
                 }
             }
         }
-
+        return hasMoved;
     }
 
-    private void moveBlocksDown(){
+    private boolean tryMoveBlocksDown() {
+        boolean hasMoved = false;
         for (int x = 0; x < BOARD_SIZE; x++) {      //navigera
-            for (int y = 0; y < BOARD_SIZE-1; y++) {
+            for (int y = 0; y < BOARD_SIZE - 1; y++) {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
                         int tempY = y;
-                        while (tempY < BOARD_SIZE-1 && positionIsFree(new Position(x, tempY+1))) {
+                        while (tempY < BOARD_SIZE - 1 && positionIsFree(new Position(x, tempY + 1))) {
                             tempY++;
+                            hasMoved = true;
                         }
                         block.setPosition(new Position(x, tempY));
                     }
                 }
             }
         }
-
+        return hasMoved;
     }
 
-    private void waitForKeyInput(Terminal terminal) {
+    private Direction waitForKeyInput(Terminal terminal) {
         Key key;
+        Direction direction = Direction.NONE;
 
+        while (direction == Direction.NONE) {
             do {
                 try {
                     Thread.sleep(5);
@@ -157,30 +259,33 @@ public class Game {
                 }
                 key = terminal.readInput();
             }
-
             while (key == null);
 
-            switch (key.getKind()) {
-                case ArrowDown:
-                    moveBlocksDown();
-                    break;
+            Key.Kind kind = key.getKind();
+
+            switch (kind) {
                 case ArrowUp:
-                    moveBlocksUp();
+                    direction = Direction.UP;
+                    break;
+                case ArrowDown:
+                    direction = Direction.DOWN;
                     break;
                 case ArrowLeft:
-                    moveBlocksLeft();
+                    direction = Direction.LEFT;
                     break;
                 case ArrowRight:
-                    moveBlocksRight();
-                    break;
-
-                case Escape:
-                    terminal.exitPrivateMode();
-                    System.exit(0);
+                    direction = Direction.RIGHT;
                     break;
             }
+
+
             while (key != null) {
                 key = terminal.readInput();
             }
         }
+
+        return direction;
+    }
+
+
 }

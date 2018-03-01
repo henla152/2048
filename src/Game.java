@@ -88,7 +88,7 @@ public class Game {
                 Block tempBlock = board[x + xDir][y + yDir];
                 if (tempBlock != null && board[x][y] != null) {
                     if (board[x][y].getCurrentMagnitude() == tempBlock.getCurrentMagnitude()) {
-                        board[x + xDir][y + yDir] = new Block(new Position(x + xSign, y + xSign), tempBlock.getCurrentMagnitude().next());
+                        board[x + xDir][y + yDir] = new Block(new Position(x + xDir, y + yDir), tempBlock.getCurrentMagnitude().next());
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
                     }

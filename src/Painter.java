@@ -26,7 +26,7 @@ public class Painter {
 
     public void paint2(List<Block> blockList) {
         for (Block block : blockList) {
-            terminal.applyBackgroundColor(block.getColor().getR(), block.getColor().getG(), block.getColor().getB());
+            terminal.applyBackgroundColor(block.getColor().getRed(), block.getColor().getGreen(), block.getColor().getBlue());
             int tempX = (block.getPosition().getX() * xScale) + xOffset;
             int tempY = (block.getPosition().getY() * yScale) + yOffset;
             for (int x = tempX; x < tempX + xScale - 2; x++) {

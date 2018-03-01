@@ -14,12 +14,40 @@ public class Painter {
     private final int yOffset = 1;
     private final int columnAmount = Game.BOARD_SIZE * xScale + xOffset * 2 + xMarginal * 3;
     private final int rowAmount = Game.BOARD_SIZE * yScale + yOffset * 2 + yMarginal * 3;
+    private final int legendSize = 30;
+    private final int xLegend = columnAmount + 5;
+    private final int yLegend = 2;
+
+    private void paintLegend() {
+        int y = yLegend;
+        Block.Magnitude blockMagnitude = Block.Magnitude.M2;
+        for (int i = 1; i < 12; i = i + 1) {
+            int value = (int) Math.pow(2, i);
+            y = i + i;
+            printTextToTerminal("      ", xLegend, yLegend + y, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
+            printTextToTerminal((value + ""), xLegend + 7, yLegend + y ,new RGBColor(46,52,54),new RGBColor(255,255,255));
+//            printTextToTerminal((value + ""), xLegend + 7, yLegend + y ,new RGBColor(46,52,54),new RGBColor(110,110,110));
+            blockMagnitude = blockMagnitude.next();
+        }
+    }
+
+    private void printCharacterToTerminal(Character character, int x, int y, RGBColor rgbColorBackground, RGBColor rgbColorForeground) {
+        terminal.applyBackgroundColor(rgbColorBackground.getRed(), rgbColorBackground.getGreen(), rgbColorBackground.getBlue());
+        terminal.applyForegroundColor(rgbColorForeground.getRed(), rgbColorForeground.getGreen(), rgbColorForeground.getBlue());
+        terminal.moveCursor(x, y);
+        terminal.putCharacter(character);
+    }
+
+    private void printTextToTerminal(String string, int x, int y, RGBColor rgbColorBackground, RGBColor rgbColorForeground) {
+        for (int i = 0; i < string.length(); i++)
+            printCharacterToTerminal(string.charAt(i), (x + i), y, rgbColorBackground, rgbColorForeground);
+    }
 
 
     public Painter() {
 //        terminal = TerminalFacade.createTerminal(System.in,
 //                System.out, Charset.forName("UTF8"));
-        terminal = TerminalFacade.createSwingTerminal(columnAmount, rowAmount);
+        terminal = TerminalFacade.createSwingTerminal(columnAmount + legendSize, rowAmount);
         terminal.enterPrivateMode();
         terminal.setCursorVisible(false);
     }
@@ -32,6 +60,8 @@ public class Painter {
         terminal.clearScreen();
         paintBorder();
         paintBlocks(blockList);
+
+        paintLegend();
     }
 
     public void paintBlocks(List<Block> blockList) {

@@ -14,20 +14,41 @@ public class Painter {
     private final int yOffset = 1;
     private final int columnAmount = Game.BOARD_SIZE * xScale + xOffset * 2 + xMarginal * 3;
     private final int rowAmount = Game.BOARD_SIZE * yScale + yOffset * 2 + yMarginal * 3;
-    private final int legendSize = 30;
-    private final int xLegend = columnAmount + 5;
+    private final int legendSize = xOffset*2;
+    private final int xLegend = columnAmount;
     private final int yLegend = 2;
+    private final int xLegendOffset = columnAmount - xOffset + (xOffset / 6);
+    private final int xLegendTextOffset = xLegendOffset + 5;
+    private final int yLegendTextOffset = yLegend + 5;
+
+
+
+    private final RGBColor borderColor = new RGBColor(110, 110, 110);
 
     private void paintLegend() {
-        int y = yLegend;
+        int yy = yLegend;
         Block.Magnitude blockMagnitude = Block.Magnitude.M2;
         for (int i = 1; i < 12; i = i + 1) {
             int value = (int) Math.pow(2, i);
-            y = i + i;
-            printTextToTerminal("      ", xLegend, yLegend + 24 - y, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
-            printTextToTerminal((value + ""), xLegend + 7, yLegend + 24 - y, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
+            yy = i + i;
+            printTextToTerminal("      ", xLegendTextOffset, yLegendTextOffset + 24 - yy, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
+            printTextToTerminal((value + ""), xLegendTextOffset + 8 + (4 - (value+"").length() ), yLegendTextOffset + 24 - yy, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
             blockMagnitude = blockMagnitude.next();
         }
+
+        //Border
+        for (int x = xLegendOffset; x < xLegendOffset + legendSize; x++) {
+            printTextToTerminal(" ", x, yOffset, borderColor, borderColor);
+            printTextToTerminal(" ", x, rowAmount - yOffset - 1, borderColor, borderColor);
+        }
+
+        for (int y = yOffset; y < rowAmount - yOffset; y++) {
+            printTextToTerminal(" ", xLegendOffset, y, borderColor, borderColor);
+            printTextToTerminal(" ", xLegendOffset + 1, y, borderColor, borderColor);
+            printTextToTerminal(" ", xLegendOffset + legendSize, y, borderColor, borderColor);
+            printTextToTerminal(" ", xLegendOffset + legendSize + 1, y, borderColor, borderColor);
+        }
+
     }
 
     private void printCharacterToTerminal(Character character, int x, int y, RGBColor rgbColorBackground, RGBColor rgbColorForeground) {
@@ -76,25 +97,15 @@ public class Painter {
     }
 
     public void paintBorder() {
-        terminal.applyBackgroundColor(110, 110, 110);
-
         for (int x = xOffset; x < columnAmount - xOffset; x++) {
-            terminal.moveCursor(x, yOffset);
-            terminal.putCharacter(' ');
-            terminal.moveCursor(x, rowAmount - yOffset - 1);
-            terminal.putCharacter(' ');
+            printTextToTerminal(" ", x, yOffset, borderColor, borderColor);
+            printTextToTerminal(" ", x, rowAmount - yOffset - 1, borderColor, borderColor);
         }
-
         for (int y = yOffset; y < rowAmount - yOffset; y++) {
-            terminal.moveCursor(xOffset, y);
-            terminal.putCharacter(' ');
-            terminal.moveCursor(xOffset + 1, y);
-            terminal.putCharacter(' ');
-            terminal.moveCursor(columnAmount - xOffset - 1, y);
-            terminal.putCharacter(' ');
-            terminal.moveCursor(columnAmount - xOffset - 2, y);
-            terminal.putCharacter(' ');
+            printTextToTerminal(" ", xOffset, y, borderColor, borderColor);
+            printTextToTerminal(" ", xOffset + 1, y, borderColor, borderColor);
+            printTextToTerminal(" ", columnAmount - xOffset - 1, y, borderColor, borderColor);
+            printTextToTerminal(" ",columnAmount - xOffset - 2, y, borderColor, borderColor);
         }
-
     }
 }

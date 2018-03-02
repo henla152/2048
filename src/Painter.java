@@ -48,6 +48,8 @@ public class Painter {
             printTextToTerminal(" ", xLegendOffset + legendSize, y, borderColor, borderColor);
             printTextToTerminal(" ", xLegendOffset + legendSize + 1, y, borderColor, borderColor);
         }
+        String score = "Score: " + Game.getScore();
+        printTextToTerminal(score, xLegendTextOffset, 5, new RGBColor(46, 52, 54), borderColor);
 
     }
 
@@ -62,7 +64,6 @@ public class Painter {
         for (int i = 0; i < string.length(); i++)
             printCharacterToTerminal(string.charAt(i), (x + i), y, rgbColorBackground, rgbColorForeground);
     }
-
 
     public Painter() {
         terminal = TerminalFacade.createSwingTerminal(columnAmount + legendSize, rowAmount);

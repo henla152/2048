@@ -12,7 +12,7 @@ public class Game {
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;
-    public int score;
+    private static int score;
 
 
     public void gameLoop() {
@@ -357,5 +357,8 @@ public class Game {
         return direction;
     }
 
+    public static String getScore() {
 
+        return Integer.toString(score);
+    }
 }

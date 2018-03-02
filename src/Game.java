@@ -29,8 +29,6 @@ public class Game {
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
 
-                if (!addBlock()) gameOver = true;
-
             }
         }
     }

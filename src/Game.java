@@ -28,6 +28,7 @@ public class Game {
             }
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
+                addBlock();
 
             }
         }
@@ -190,14 +191,12 @@ public class Game {
 //        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
-    private boolean addBlock() {
+    private void addBlock() {
         List<Position> tempList = listOfFreePositions();
         if (tempList.size() != 0) {
             Collections.shuffle(tempList);
             blockList.add(new Block(tempList.get(0)));
-            return true;
         }
-        return false;
     }
 
     private List<Position> listOfFreePositions() {

@@ -7,7 +7,11 @@ public class Main {
         Game game = new Game(painter);
         game.gameInit();
         game.gameLoop();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
 
-        System.out.println("GAME OVER");
+        }
+        painter.paintGameOver();
     }
 }

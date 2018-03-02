@@ -14,13 +14,11 @@ public class Painter {
     private final int yOffset = 1;
     private final int columnAmount = Game.BOARD_SIZE * xScale + xOffset * 2 + xMarginal * 3;
     private final int rowAmount = Game.BOARD_SIZE * yScale + yOffset * 2 + yMarginal * 3;
-    private final int legendSize = xOffset*2;
-    private final int xLegend = columnAmount;
+    private final int legendSize = xOffset * 2;
     private final int yLegend = 2;
     private final int xLegendOffset = columnAmount - xOffset + (xOffset / 6);
     private final int xLegendTextOffset = xLegendOffset + 5;
     private final int yLegendTextOffset = yLegend + 5;
-
 
 
     private final RGBColor borderColor = new RGBColor(110, 110, 110);
@@ -32,7 +30,7 @@ public class Painter {
             int value = (int) Math.pow(2, i);
             yy = i + i;
             printTextToTerminal("      ", xLegendTextOffset, yLegendTextOffset + 24 - yy, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
-            printTextToTerminal((value + ""), xLegendTextOffset + 8 + (4 - (value+"").length() ), yLegendTextOffset + 24 - yy, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
+            printTextToTerminal((value + ""), xLegendTextOffset + 8 + (4 - (value + "").length()), yLegendTextOffset + 24 - yy, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
             blockMagnitude = blockMagnitude.next();
         }
 
@@ -49,7 +47,7 @@ public class Painter {
             printTextToTerminal(" ", xLegendOffset + legendSize + 1, y, borderColor, borderColor);
         }
         String score = "Score: " + Game.getScore();
-        printTextToTerminal(score, xLegendTextOffset, 5, new RGBColor(46, 52, 54), borderColor);
+        printTextToTerminal(score, xLegendTextOffset, 5, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
 
     }
 
@@ -84,7 +82,12 @@ public class Painter {
     }
 
     public void paintGameOver() {
-
+        for (int x = 0; x < 12; x++) {
+            for (int y = 0; y < 10; y++) {
+                printTextToTerminal("                                                   ",columnAmount / 4 + x, rowAmount / 3 + y, borderColor, borderColor);
+            }
+        }
+        printTextToTerminal("G A M E  O V E R !", columnAmount / 2, rowAmount / 2, borderColor, new RGBColor(255, 255, 255));
     }
 
     public void paintBlocks(List<Block> blockList) {
@@ -110,7 +113,7 @@ public class Painter {
             printTextToTerminal(" ", xOffset, y, borderColor, borderColor);
             printTextToTerminal(" ", xOffset + 1, y, borderColor, borderColor);
             printTextToTerminal(" ", columnAmount - xOffset - 1, y, borderColor, borderColor);
-            printTextToTerminal(" ",columnAmount - xOffset - 2, y, borderColor, borderColor);
+            printTextToTerminal(" ", columnAmount - xOffset - 2, y, borderColor, borderColor);
         }
     }
 }

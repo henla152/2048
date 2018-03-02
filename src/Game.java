@@ -12,7 +12,8 @@ public class Game {
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;
-    Random random = new Random();
+    public int score;
+    
 
     public void gameLoop() {
 
@@ -26,6 +27,7 @@ public class Game {
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
                 addBlock();
+                System.out.println(score);
 
             }
 //            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
@@ -83,6 +85,7 @@ public class Game {
                 yDir = 1;
                 break;
         }
+        int scoreValue =0;
         for (int x = xStart; x != xEnd; x = x - xSign) {
             for (int y = yStart; y != yEnd; y = y - ySign) {
                 System.out.printf("x: %d, y: %d%n", x, y);
@@ -92,10 +95,12 @@ public class Game {
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
                         hasCombined = true;
+                        scoreValue += getCurrentMagnitudeInteger(tempBlock.getCurrentMagnitude().next());
                     }
                 }
             }
         }
+        score += scoreValue;
         return hasCombined;
     }
 
@@ -105,6 +110,50 @@ public class Game {
         blockList.remove(b);
         blockList.add(newBlock);
         return newBlock;
+    }
+
+    private int getCurrentMagnitudeInteger(Block.Magnitude magnitude){
+        Block.Magnitude mag = magnitude;
+        int scoreValue;
+
+        switch (mag){
+            case M4:
+                scoreValue = 4;
+                break;
+            case M8:
+                scoreValue = 8;
+                break;
+            case M16:
+                scoreValue = 16;
+                break;
+            case M32:
+                scoreValue = 32;
+                break;
+            case M64:
+                scoreValue = 64;
+                break;
+            case M128:
+                scoreValue = 128;
+                break;
+            case M256:
+                scoreValue = 256;
+                break;
+            case M512:
+                scoreValue = 512;
+                break;
+            case M1024:
+                scoreValue = 1024;
+                break;
+            case M2048:
+                scoreValue = 2048;
+                break;
+            default :
+                scoreValue = 0;
+                break;
+        }
+        return scoreValue;
+
+
     }
 
     public Game(Painter painter) {

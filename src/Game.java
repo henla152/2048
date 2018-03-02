@@ -12,7 +12,6 @@ public class Game {
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;
-    Random random = new Random();
 
     public void gameLoop() {
 
@@ -25,14 +24,21 @@ public class Game {
             Direction direction = waitForKeyInput(painter.getTerminal());
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
-                addBlock();
+                if (!addBlock()) gameOver = true;
 
+            } else {
+                for (Block block1 : blockList) {
+                    for (Block block2 : blockList) {
+
+                    }
+                }
             }
+
 //            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
 //                    gameOver = true;
 //            }
 
-            if (blockList.size() == BOARD_SIZE*BOARD_SIZE) gameOver = true;
+//            if (blockList.size() == BOARD_SIZE*BOARD_SIZE) gameOver = true;
         }
     }
 
@@ -55,28 +61,24 @@ public class Game {
 
         switch (direction) {
             case LEFT:
-                System.out.println("LEFT");
                 xSign = -1;
                 xStart = 1;
                 xEnd = BOARD_SIZE;
                 xDir = -1;
                 break;
             case RIGHT:
-                System.out.println("RIGHT");
                 xSign = 1;
                 xStart = BOARD_SIZE - 2;
                 xEnd = -1;
                 xDir = 1;
                 break;
             case UP:
-                System.out.println("UP");
                 ySign = -1;
                 yStart = 1;
                 yEnd = BOARD_SIZE;
                 yDir = -1;
                 break;
             case DOWN:
-                System.out.println("DOWN");
                 ySign = 1;
                 yStart = BOARD_SIZE - 2;
                 yEnd = -1;
@@ -85,7 +87,6 @@ public class Game {
         }
         for (int x = xStart; x != xEnd; x = x - xSign) {
             for (int y = yStart; y != yEnd; y = y - ySign) {
-                System.out.printf("x: %d, y: %d%n", x, y);
                 Block tempBlock = board[x + xDir][y + yDir];
                 if (tempBlock != null && board[x][y] != null) {
                     if (board[x][y].getCurrentMagnitude() == tempBlock.getCurrentMagnitude()) {
@@ -118,29 +119,36 @@ public class Game {
         addBlock();
 
         //DEBUG
-//        for (int x = 1; x < 4; x++) {
-//            for (int y = 0; y < 4; y++) {
-//                blockList.add(new Block(new Position(x,y), Block.Magnitude.M2));
-//            }
-//        }
-//        blockList.add(new Block(new Position(0,0), Block.Magnitude.M2));
-//        blockList.add(new Block(new Position(0,3), Block.Magnitude.M2));
-//        blockList.add(new Block(new Position(3,0), Block.Magnitude.M2));
+        Block.Magnitude m = Block.Magnitude.M2;
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 3; y++) {
+                blockList.add(new Block(new Position(x,y), m));
+                m = m.next();
+            }
+        }
+        blockList.add(new Block(new Position(1,3), Block.Magnitude.M128));
+        blockList.add(new Block(new Position(2,3), Block.Magnitude.M256));
+        blockList.add(new Block(new Position(3,3), Block.Magnitude.M1024));
 //        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
-    private void addBlock() {
+    private boolean addBlock() {
         List<Position> tempList = listOfFreePositions();
-        Collections.shuffle(tempList);
-        blockList.add(new Block(tempList.get(0)));
+        if(tempList.size() != 0) {
+            Collections.shuffle(tempList);
+            blockList.add(new Block(tempList.get(0)));
+            return true;
+        }
+        return false;
     }
 
     private List<Position> listOfFreePositions() {
         List<Position> result = new ArrayList<>();
         for (int x = 0; x < BOARD_SIZE; x++) {
             for (int y = 0; y < BOARD_SIZE; y++) {
-                if (positionIsFree(new Position(x, y))) {
-                    result.add(new Position(x, y));
+                Position pos = new Position(x, y);
+                if (positionIsFree(pos)) {
+                    result.add(pos);
                 }
             }
         }

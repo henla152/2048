@@ -25,11 +25,9 @@ public class Game {
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
                 if (!addBlock()) gameOver = true;
-
             } else {
                 for (Block block1 : blockList) {
                     for (Block block2 : blockList) {
-
                     }
                 }
             }
@@ -122,19 +120,19 @@ public class Game {
         Block.Magnitude m = Block.Magnitude.M2;
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 3; y++) {
-                blockList.add(new Block(new Position(x,y), m));
+                blockList.add(new Block(new Position(x, y), m));
                 m = m.next();
             }
         }
-        blockList.add(new Block(new Position(1,3), Block.Magnitude.M128));
-        blockList.add(new Block(new Position(2,3), Block.Magnitude.M256));
-        blockList.add(new Block(new Position(3,3), Block.Magnitude.M1024));
+        blockList.add(new Block(new Position(1, 3), Block.Magnitude.M128));
+        blockList.add(new Block(new Position(2, 3), Block.Magnitude.M256));
+        blockList.add(new Block(new Position(3, 3), Block.Magnitude.M1024));
 //        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
     private boolean addBlock() {
         List<Position> tempList = listOfFreePositions();
-        if(tempList.size() != 0) {
+        if (tempList.size() != 0) {
             Collections.shuffle(tempList);
             blockList.add(new Block(tempList.get(0)));
             return true;

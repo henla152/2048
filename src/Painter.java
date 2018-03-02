@@ -82,6 +82,10 @@ public class Painter {
         paintLegend();
     }
 
+    public void paintGameOver() {
+
+    }
+
     public void paintBlocks(List<Block> blockList) {
         for (Block block : blockList) {
             terminal.applyBackgroundColor(block.getColor().getRed(), block.getColor().getGreen(), block.getColor().getBlue());

@@ -135,11 +135,10 @@ public class Game {
 //                blockList.add(new Block(new Position(x,y), Block.Magnitude.M2));
 //            }
 //        }
-
-
-        /*for (int i = 0; i < 14; i++) {
-            addBlock();
-        }*/
+//        blockList.add(new Block(new Position(0,0), Block.Magnitude.M2));
+//        blockList.add(new Block(new Position(0,3), Block.Magnitude.M2));
+//        blockList.add(new Block(new Position(3,0), Block.Magnitude.M2));
+//        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
     private void addBlock() {
@@ -194,7 +193,7 @@ public class Game {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
                         int tempX = x;
-                        while (tempX >= 1 && positionIsFree(new Position(tempX - 1, y))) {
+                        while (tempX > 0 && positionIsFree(new Position(tempX - 1, y))) {
                             tempX--;
                             hasMoved = true;
                         }
@@ -208,7 +207,7 @@ public class Game {
 
     private boolean tryMoveBlocksRight() {
         boolean hasMoved = false;
-        for (int x = 0; x < BOARD_SIZE - 1; x++) {      //navigera
+        for (int x = BOARD_SIZE - 2; x >= 0; x--) {      //navigera
             for (int y = 0; y < BOARD_SIZE; y++) {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
@@ -247,7 +246,7 @@ public class Game {
     private boolean tryMoveBlocksDown() {
         boolean hasMoved = false;
         for (int x = 0; x < BOARD_SIZE; x++) {      //navigera
-            for (int y = 0; y < BOARD_SIZE - 1; y++) {
+            for (int y = BOARD_SIZE - 2; y >= 0; y--) {
                 for (Block block : blockList) {
                     if (block.getPosition().getX() == x && block.getPosition().getY() == y) {  //kolla om rutan innehåller block
                         int tempY = y;

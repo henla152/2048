@@ -4,7 +4,6 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class Game {
 
@@ -18,8 +17,6 @@ public class Game {
     public void gameLoop() {
 
         while (!gameOver) {
-            //logik
-            //kontrollera gameOVer
 
             painter.paint(blockList);
 
@@ -346,11 +343,6 @@ public class Game {
                 case ArrowRight:
                     direction = Direction.RIGHT;
                     break;
-            }
-
-
-            while (key != null) {
-                key = terminal.readInput();
             }
         }
 

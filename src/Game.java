@@ -12,7 +12,7 @@ public class Game {
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;
-    public int score;
+    private static int score;
 
 
     public void gameLoop() {
@@ -88,7 +88,7 @@ public class Game {
                 yDir = 1;
                 break;
         }
-        int scoreValue =0;
+        int scoreValue = 0;
         for (int x = xStart; x != xEnd; x = x - xSign) {
             for (int y = yStart; y != yEnd; y = y - ySign) {
                 Block tempBlock = board[x + xDir][y + yDir];
@@ -114,11 +114,11 @@ public class Game {
         return newBlock;
     }
 
-    private int getCurrentMagnitudeInteger(Block.Magnitude magnitude){
+    private int getCurrentMagnitudeInteger(Block.Magnitude magnitude) {
         Block.Magnitude mag = magnitude;
         int scoreValue;
 
-        switch (mag){
+        switch (mag) {
             case M4:
                 scoreValue = 4;
                 break;
@@ -149,7 +149,7 @@ public class Game {
             case M2048:
                 scoreValue = 2048;
                 break;
-            default :
+            default:
                 scoreValue = 0;
                 break;
         }
@@ -172,19 +172,19 @@ public class Game {
         Block.Magnitude m = Block.Magnitude.M2;
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 3; y++) {
-                blockList.add(new Block(new Position(x,y), m));
+                blockList.add(new Block(new Position(x, y), m));
                 m = m.next();
             }
         }
-        blockList.add(new Block(new Position(1,3), Block.Magnitude.M128));
-        blockList.add(new Block(new Position(2,3), Block.Magnitude.M256));
-        blockList.add(new Block(new Position(3,3), Block.Magnitude.M1024));
+        blockList.add(new Block(new Position(1, 3), Block.Magnitude.M128));
+        blockList.add(new Block(new Position(2, 3), Block.Magnitude.M256));
+        blockList.add(new Block(new Position(3, 3), Block.Magnitude.M1024));
 //        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
     private boolean addBlock() {
         List<Position> tempList = listOfFreePositions();
-        if(tempList.size() != 0) {
+        if (tempList.size() != 0) {
             Collections.shuffle(tempList);
             blockList.add(new Block(tempList.get(0)));
             return true;
@@ -344,5 +344,8 @@ public class Game {
         return direction;
     }
 
+    public static String getScore() {
 
+        return Integer.toString(score);
+    }
 }

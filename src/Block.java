@@ -14,7 +14,6 @@ public class Block {
     private Magnitude currentMagnitude;
     private Position position;
     private RGBColor color;
-    private boolean newlyCombined = false;
     private static Random random = new Random();
 
     public Block(Position position) {
@@ -25,11 +24,6 @@ public class Block {
         this.currentMagnitude = currentMagnitude;
         this.position = position;
         this.color = ColorMap.getColor(currentMagnitude);
-    }
-
-    //Debug
-    public void print() {
-        System.out.println("Block\t" + "Position " + position.getX() + ", " + position.getY() + "\tcurrentValue " + currentMagnitude);
     }
 
     public Position getPosition() {

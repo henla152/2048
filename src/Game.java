@@ -22,15 +22,8 @@ public class Game {
 
             painter.paint(blockList);
 
-            //DEBUG
-            for (Block block : blockList) {
-                System.out.print(block.getCurrentMagnitude());
-                System.out.printf(": X: %d, Y: %d%n", block.getPosition().getX(), block.getPosition().getY());
-            }
-
             Direction direction = waitForKeyInput(painter.getTerminal());
-            if (tryMoveBlocks(direction) | checkForCollisions(direction)) { //Fixade problemet?
-                //checkForCollisions(direction);
+            if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
                 addBlock();
 
@@ -38,14 +31,10 @@ public class Game {
 //            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
 //                    gameOver = true;
 //            }
+
+            if (blockList.size() == BOARD_SIZE*BOARD_SIZE) gameOver = true;
         }
     }
-
-//        System.out.println(blockList.size());
-//        for (Block block : blockList) {
-//            block.print();
-//        }
-
 
     private boolean checkForCollisions(Direction direction) {
         Block[][] board = new Block[BOARD_SIZE][BOARD_SIZE];
@@ -100,7 +89,6 @@ public class Game {
                 Block tempBlock = board[x + xDir][y + yDir];
                 if (tempBlock != null && board[x][y] != null) {
                     if (board[x][y].getCurrentMagnitude() == tempBlock.getCurrentMagnitude()) {
-//                        board[x + xDir][y + yDir] = new Block(new Position(x + xDir, y + yDir), tempBlock.getCurrentMagnitude().next());
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
                         hasCombined = true;
@@ -177,11 +165,6 @@ public class Game {
                 return tryMoveBlocksLeft();
             case RIGHT:
                 return tryMoveBlocksRight();
-
-//            case Escape:
-//                terminal.exitPrivateMode();
-//                System.exit(0);
-//                break;
         }
         return false;
     }

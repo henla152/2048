@@ -24,9 +24,8 @@ public class Painter {
         for (int i = 1; i < 12; i = i + 1) {
             int value = (int) Math.pow(2, i);
             y = i + i;
-            printTextToTerminal("      ", xLegend, yLegend + y, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
-            printTextToTerminal((value + ""), xLegend + 7, yLegend + y ,new RGBColor(46,52,54),new RGBColor(255,255,255));
-//            printTextToTerminal((value + ""), xLegend + 7, yLegend + y ,new RGBColor(46,52,54),new RGBColor(110,110,110));
+            printTextToTerminal("      ", xLegend, yLegend + 24 - y, ColorMap.getColor(blockMagnitude), ColorMap.getColor(blockMagnitude));
+            printTextToTerminal((value + ""), xLegend + 7, yLegend + 24 - y, new RGBColor(46, 52, 54), new RGBColor(255, 255, 255));
             blockMagnitude = blockMagnitude.next();
         }
     }
@@ -45,8 +44,6 @@ public class Painter {
 
 
     public Painter() {
-//        terminal = TerminalFacade.createTerminal(System.in,
-//                System.out, Charset.forName("UTF8"));
         terminal = TerminalFacade.createSwingTerminal(columnAmount + legendSize, rowAmount);
         terminal.enterPrivateMode();
         terminal.setCursorVisible(false);
@@ -80,30 +77,7 @@ public class Painter {
 
     public void paintBorder() {
         terminal.applyBackgroundColor(110, 110, 110);
-//        for (int i = 0; i < ((xScale * Game.BOARD_SIZE + xMarginal) + 1); i++) {
-//            int tempX = Math.max((xOffset - 1 + i), 0);
-//            int tempY = Math.min(yOffset - 1, 30);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//            tempY = Math.min(yOffset + (yScale * Game.BOARD_SIZE + yMarginal * 4) - 1, 30);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//        }
-//        for (int i = 0; i < ((yScale * Game.BOARD_SIZE + yMarginal) + 1); i++) {
-//            int tempX = Math.max((xOffset - 2), 0);
-//            int tempY = Math.min((yOffset - 1 + i), 30);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//            tempX = Math.max((xOffset - 1), 0);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//            tempX = Math.max((xOffset + (xScale * Game.BOARD_SIZE + xMarginal * 2) - 1), 0);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//            tempX = Math.max((xOffset + (xScale * Game.BOARD_SIZE + xMarginal * 2) - 2), 0);
-//            terminal.moveCursor(tempX, tempY);
-//            terminal.putCharacter(' ');
-//        }
+
         for (int x = xOffset; x < columnAmount - xOffset; x++) {
             terminal.moveCursor(x, yOffset);
             terminal.putCharacter(' ');

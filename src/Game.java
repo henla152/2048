@@ -12,6 +12,8 @@ public class Game {
     private Painter painter;
     private List<Block> blockList;
     private boolean gameOver = false;
+    private static int score;
+
 
     public void gameLoop() {
 
@@ -21,23 +23,37 @@ public class Game {
 
             painter.paint(blockList);
 
-            Direction direction = waitForKeyInput(painter.getTerminal());
+            if (blockList.size() > 15 && !(isCombinableNeighbours())) gameOver = true;
+
+            Direction direction = Direction.NONE;
+            if (!gameOver) {
+                direction = waitForKeyInput(painter.getTerminal());
+            }
             if (tryMoveBlocks(direction) | checkForCollisions(direction)) {
                 tryMoveBlocks(direction);
-                if (!addBlock()) gameOver = true;
-            } else {
-                for (Block block1 : blockList) {
-                    for (Block block2 : blockList) {
-                    }
-                }
+
             }
-
-//            if (!(tryMoveBlocks(direction) && checkForCollisions(direction)) && listOfFreePositions().size() == 0) { //stannar med en kvar....
-//                    gameOver = true;
-//            }
-
-//            if (blockList.size() == BOARD_SIZE*BOARD_SIZE) gameOver = true;
         }
+    }
+
+    private boolean isCombinableNeighbours() {
+        int x1, y1, x2, y2;
+        Block.Magnitude mag1, mag2;
+        for (Block block1 : blockList) {
+            x1 = block1.getPosition().getX();
+            y1 = block1.getPosition().getY();
+            mag1 = block1.getCurrentMagnitude();
+            for (Block block2 : blockList) {
+                x2 = block2.getPosition().getX();
+                y2 = block2.getPosition().getY();
+                mag2 = block2.getCurrentMagnitude();
+                if (x2 == x1 - 1 && y2 == y1 && mag1 == mag2) return true;
+                if (x2 == x1 + 1 && y2 == y1 && mag1 == mag2) return true;
+                if (x2 == x1 && y2 == y1 - 1 && mag1 == mag2) return true;
+                if (x2 == x1 && y2 == y1 + 1 && mag1 == mag2) return true;
+            }
+        }
+        return false;
     }
 
     private boolean checkForCollisions(Direction direction) {
@@ -83,6 +99,7 @@ public class Game {
                 yDir = 1;
                 break;
         }
+        int scoreValue = 0;
         for (int x = xStart; x != xEnd; x = x - xSign) {
             for (int y = yStart; y != yEnd; y = y - ySign) {
                 Block tempBlock = board[x + xDir][y + yDir];
@@ -91,10 +108,12 @@ public class Game {
                         board[x + xDir][y + yDir] = combineBlocks(tempBlock, board[x][y]);
                         board[x][y] = null;
                         hasCombined = true;
+                        scoreValue += getCurrentMagnitudeInteger(tempBlock.getCurrentMagnitude().next());
                     }
                 }
             }
         }
+        score += scoreValue;
         return hasCombined;
     }
 
@@ -104,6 +123,50 @@ public class Game {
         blockList.remove(b);
         blockList.add(newBlock);
         return newBlock;
+    }
+
+    private int getCurrentMagnitudeInteger(Block.Magnitude magnitude) {
+        Block.Magnitude mag = magnitude;
+        int scoreValue;
+
+        switch (mag) {
+            case M4:
+                scoreValue = 4;
+                break;
+            case M8:
+                scoreValue = 8;
+                break;
+            case M16:
+                scoreValue = 16;
+                break;
+            case M32:
+                scoreValue = 32;
+                break;
+            case M64:
+                scoreValue = 64;
+                break;
+            case M128:
+                scoreValue = 128;
+                break;
+            case M256:
+                scoreValue = 256;
+                break;
+            case M512:
+                scoreValue = 512;
+                break;
+            case M1024:
+                scoreValue = 1024;
+                break;
+            case M2048:
+                scoreValue = 2048;
+                break;
+            default:
+                scoreValue = 0;
+                break;
+        }
+        return scoreValue;
+
+
     }
 
     public Game(Painter painter) {
@@ -117,16 +180,16 @@ public class Game {
         addBlock();
 
         //DEBUG
-        Block.Magnitude m = Block.Magnitude.M2;
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 3; y++) {
-                blockList.add(new Block(new Position(x, y), m));
-                m = m.next();
-            }
-        }
-        blockList.add(new Block(new Position(1, 3), Block.Magnitude.M128));
-        blockList.add(new Block(new Position(2, 3), Block.Magnitude.M256));
-        blockList.add(new Block(new Position(3, 3), Block.Magnitude.M1024));
+//        Block.Magnitude m = Block.Magnitude.M2;
+//        for (int x = 0; x < 4; x++) {
+//            for (int y = 0; y < 3; y++) {
+//                blockList.add(new Block(new Position(x, y), m));
+//                m = m.next();
+//            }
+//        }
+//        blockList.add(new Block(new Position(1, 3), Block.Magnitude.M128));
+//        blockList.add(new Block(new Position(2, 3), Block.Magnitude.M256));
+//        blockList.add(new Block(new Position(3, 3), Block.Magnitude.M1024));
 //        blockList.add(new Block(new Position(3,3), Block.Magnitude.M2));
     }
 
@@ -292,5 +355,8 @@ public class Game {
         return direction;
     }
 
+    public static String getScore() {
 
+        return Integer.toString(score);
+    }
 }
